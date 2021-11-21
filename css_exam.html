@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>css 테이블 과제</title>
+        <style>
+            div {
+                display: inline-block;
+                text-align: center;
+            }
+            #box{
+                left: 50%;
+                margin-left: -300px;
+                position: relative;
+            }
+            .div1 {
+                width: 400px;
+                height: 200px;
+                line-height: 200px;
+                position: absolute;
+            }
+            .div2 {
+                width: 200px;
+                height: 400px;
+                line-height: 400px;
+                position: absolute;
+            }
+            #td1 {
+                top: 0;
+                left: 200px;
+                background-color: #ffff00;
+            }
+            #td2 {
+                top: 200px;
+                left: 400px;
+                background-color: #00ff00;
+            }
+            #td3 {
+                top: 400px;
+                left: 0;
+                background-color: #0000ff;
+            }
+            #td4 {
+                top: 0;
+                left: 0;
+                background-color: #ff0000;
+            }
+            #image {
+                top: 200px;
+                left: 200px;
+                width: 200px;
+                height: 200px;
+                position: absolute;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="box">
+            <div id="td1" class="div1">1</div>
+            <div id="td2" class="div2">2</div>
+            <div id="td3" class="div1">3</div>
+            <div id="td4" class="div2">4</div>
+            <div id="image"><img src="bob.gif" width="200px" height="200px"></div>
+        </div>
+    </body>
+</html>
