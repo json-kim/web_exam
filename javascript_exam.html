@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>javascript 과제</title>
+        <style>
+            button{
+                width: 300px;
+                height: 100px;
+                font-size: 20px;
+            }
+            .white{
+                background-color: white;
+                border-color: black;
+                color: black;
+            }
+            .grey{
+                background-color: grey;
+                border-color: grey;
+                color: white;
+            }
+        </style>
+    </head>
+    <body>
+        <button id="html" class="grey">html</button>
+        <button id="css" class="grey">css</button>
+        <button id="js" class="grey">javascript</button>
+        
+        <script>
+            const html = document.getElementById('html');
+            const css = document.getElementById('css');
+            const js = document.getElementById('js');
+
+            html.addEventListener('click', function() {
+                reset();
+                change(html);
+            });
+            css.addEventListener('click', function() {
+                reset();
+                change(css);
+            });
+            js.addEventListener('click', function() {
+                reset();
+                change(js);
+            });
+
+            function reset() {
+                html.className = 'grey';
+                css.className = 'grey';
+                js.className = 'grey';
+            }
+
+            function change(button) {
+                button.className = 'white';
+            }
+        </script>
+    </body>
+</html>
