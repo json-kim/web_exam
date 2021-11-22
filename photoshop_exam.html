@@ -36,13 +36,13 @@
                         <div id="file_name" class="col">선택된 파일이 없습니다.</div>
                     </div>
                     <div id="filter_btn" class="clearfix">
-                        <button type="button" id="btn1" class="btn btn-primary m-2 float-start">회색으로</button>
-                        <button type="button" id="btn2" class="btn btn-primary m-2 float-start">흐리게</button>
-                        <button type="button" id="btn3" class="btn btn-primary m-2 float-start">그림자</button>
-                        <button type="button" id="btn4" class="btn btn-primary m-2 float-start">50% 투명</button>
-                        <button type="button" id="btn5" class="btn btn-primary m-2 float-start">좌로 90도 회전</button>
-                        <button type="button" id="btn6" class="btn btn-primary m-2 float-start">우로 90도 회전</button>
-                        <button type="button" id="btn7" class="btn btn-primary m-2 float-start">이미지 초기화</button>
+                        <button type="button" id="gray" class="btn btn-primary m-2 float-start">회색으로</button>
+                        <button type="button" id="blur" class="btn btn-primary m-2 float-start">흐리게</button>
+                        <button type="button" id="shadow" class="btn btn-primary m-2 float-start">그림자</button>
+                        <button type="button" id="opacity" class="btn btn-primary m-2 float-start">50% 투명</button>
+                        <button type="button" id="left" class="btn btn-primary m-2 float-start">좌로 90도 회전</button>
+                        <button type="button" id="right" class="btn btn-primary m-2 float-start">우로 90도 회전</button>
+                        <button type="button" id="reset" class="btn btn-primary m-2 float-start">이미지 초기화</button>
                       </div>
                 </div>
             </div>
@@ -55,6 +55,13 @@
         const fileName = document.getElementById('file_name');
         const filterButton = document.getElementById('filter_btn');
         const notFileName = image.src;
+        const filterButtonsId = ['gray', 'blur', 'shadow', 'opacity']; // gray, blur, shadow, opacity,
+        const transformButtonsId = ['left', 'right']; // left, right
+        const transformDegrees = [-90, 90];
+        
+        let isButtonsClicked = [false, false, false, false];
+        let filtersOption = ['grayscale(100%)', 'blur(3px)', 'drop-shadow(10px 10px 3px grey)', 'opacity(50%)'];
+        let degree = 0;
 
         // 이미지 선택 버튼
         document
@@ -66,56 +73,61 @@
             });
         
         // 이미지 필터 버튼
-        document.getElementById('btn1').addEventListener('click', function() {
+        for (let i = 0; i < filterButtonsId.length; i++) {
+            document.getElementById(filterButtonsId[i]).addEventListener('click', function() {
+                if (image.src == notFileName) {
+                    alert('이미지가 아닙니다.');
+                } else {
+                    isButtonsClicked[i] = !isButtonsClicked[i];
+                    update();
+                }
+            });
+        }
+        
+        // 이미지 트랜스폼 버튼
+        for (let i = 0; i < transformButtonsId.length; i++) {
+            document.getElementById(transformButtonsId[i]).addEventListener('click', function() {
+                if (image.src == notFileName) {
+                    alert('이미지가 아닙니다.');
+                } else {
+                    degree = degree + transformDegrees[i];
+                    update();
+                }
+            });
+        }
+
+        // 리셋 버튼
+        document.getElementById('reset').addEventListener('click', function() {
             if (image.src == notFileName) {
                 alert('이미지가 아닙니다.');
             } else {
-                image.style.filter = 'grayscale(100%)';
+                reset();
+                update();
             }
         });
-        document.getElementById('btn2').addEventListener('click', function() {
-            if (image.src == notFileName) {
-                alert('이미지가 아닙니다.');
-            } else {
-                image.style.filter = 'blur(3px)';
+
+        function update() {
+            let filterString = '';
+            
+            for (let i = 0; i < isButtonsClicked.length; i++) {
+                if (isButtonsClicked[i]) {
+                    filterString += filtersOption[i] + ' ';
+                }
             }
-        });
-        document.getElementById('btn3').addEventListener('click', function() {
-            if (image.src == notFileName) {
-                alert('이미지가 아닙니다.');
-            } else {
-                image.style.filter = 'drop-shadow(10px 10px 3px grey';
-            }
-        });
-        document.getElementById('btn4').addEventListener('click', function() {
-            if (image.src == notFileName) {
-                alert('이미지가 아닙니다.');
-            } else {
-                image.style.filter = 'opacity(50%)';
-            }
-        });
-        document.getElementById('btn5').addEventListener('click', function() {
-            if (image.src == notFileName) {
-                alert('이미지가 아닙니다.');
-            } else {
-                image.style.transform = 'rotate(270deg)';
-            }
-        });
-        document.getElementById('btn6').addEventListener('click', function() {
-            if (image.src == notFileName) {
-                alert('이미지가 아닙니다.');
-            } else {
-                image.style.transform = 'rotate(90deg)';
-            }
-        });
-        document.getElementById('btn7').addEventListener('click', function() {
-            if (image.src == notFileName) {
-                alert('이미지가 아닙니다.');
-            } else {
-                image.style.filter = '';
-                image.style.transform = 'rotate(0deg)';
-            }
-        });
+            
+            let transformString = 'rotate(' + degree + 'deg)';
+
+            image.style.filter = filterString;
+            image.style.transform = transformString;
+        }
+
+        function reset() {
+            isButtonsClicked[0] = false;
+            isButtonsClicked[1] = false;
+            isButtonsClicked[2] = false;
+            isButtonsClicked[3] = false;
+            degree = 0;
+        }
     </script>
     <script></script>
 </html>
