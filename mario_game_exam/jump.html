@@ -113,18 +113,17 @@
         </div>
         <div id="game_over">
             <center>
-                <h1>game over</h1>
-                <button id="replay_btn">다시하기</button>
+                <div id="replay_btn"><img src="over.gif"/></div>
+                <div>다시하기</div>
             </center>
         </div>
         <div id="game_login">
             <center>
-                <h1>자바스크립트 마리오</h1>
-                <b>개발자 :</b>
-                <input type="text" name="dev_name" id="dev_id"/><br/><br/>
                 <img src="run.gif" id="start_img"/><br/><br/>
+                <b>이름 :</b>
+                <input type="text" name="dev_name" id="dev_id"/><br/><br/>
                 <div>
-                    <button id="start_btn">게임시작</button>
+                    <img id="start_btn" src="start.gif"/>
                 </div><br/><br/>
                 <div>
                     <table border="1" id='rank_table'>
@@ -153,17 +152,16 @@
         var gunba1 = $("#gunba1"); // 군바1 셀렉터
         var killer = $("#killer"); // 킬러 셀렉터
         var dev_name; // 플레이어 이름
-        var goobaInterval1;
-        var marioInterval1;
-        var ranks = [];
-        var rankTable = $("#rank_table");
+        var goobaInterval1; // 군바 상태 확인 인터벌
+        var marioInterval1; // 마리오 상태 확인 인터벌
+        var ranks = []; // 랭킹 정보 리스트
+        var rankTable = $("#rank_table"); // 랭킹정보를 표시할 테이블 셀렉터
 
         // 군바 - 동작 시작
         function gunbaStart(gunba) {
             // 군바 - 스피드 랜덤
             let speed = Math.floor(Math.random() * 1000) + 2000;
             // 군바 - 등장
-            gunbaInit(gunba);
             gunba.show();
 
             // 군바 - 왼쪽 끝으로 이동
@@ -176,14 +174,16 @@
 
                 // 군바 - 위치 초기화
                 gunbaInit(gunba);
-                gunba.hide();
 
                 // 군바 - 1초 뒤 시작
                 setTimeout(() => gunbaStart(gunba), speed - 1000);
             });
         }
 
+        // 군바 - 초기화
         function gunbaInit(gunba) {
+            gunba.stop();
+            gunba.hide();
             gunba.css("left", "");
             gunba.css("right", "10px");
         }
@@ -243,7 +243,6 @@
                         }, 200, function () {
                             // 군바 - 다운 동작 종료 시, 위치 초가화
                             gunbaInit(gunba);
-                            gunba.hide();
                             // 군바 - 1초 뒤, 시작
                             setTimeout(() => gunbaStart(gunba), 1000);
                             isGunbaDown = false;
@@ -265,9 +264,7 @@
                     isMarioDown = true;
 
                     // 군바 - 기존 동작을 멈추고 위치 초기화
-                    gunba.stop();
                     gunbaInit(gunba);
-                    gunba.hide();
 
                     // 마리오 - 다운 동작 수행
                     mario
@@ -290,6 +287,17 @@
                             }, 1000);
                         });
                 }
+            }
+        }
+
+        // 마리오 - 변신 함수
+        function changeMario(input) {
+            if (input) {
+                $("#mario_img").prop("src", "change.gif");
+                $("#mario_img").css("width", "140px");
+            } else {
+                $("#mario_img").prop("src", "run.gif");
+                $("#mario_img").css("width", "80px");
             }
         }
 
@@ -345,39 +353,7 @@
             });
         }
 
-        // 마리오 - 변신 함수
-        function changeMario(input) {
-            if (input) {
-                $("#mario_img").prop("src", "change.gif");
-                $("#mario_img").css("width", "140px");
-            } else {
-                $("#mario_img").prop("src", "run.gif");
-                $("#mario_img").css("width", "80px");
-            }
-        }
-
-        // 게임 종료
-        function gameOver() {
-            clearTimeout();
-
-            // 마리오, 군바 - 체크 제거
-            clearInterval(marioInterval1);
-            clearInterval(gunbaInterval1);
-
-            // 군바 - 동작 종료, 초기화
-            gunba1.stop();
-            gunbaInit(gunba1);
-
-            // 랭킹 - 랭킹 정보 등록 점수 - 마리오 다운 시, 0으로 초기화
-            rankSave(dev_name, score);
-            score = 0;
-            setScore(score);
-
-            // 화면 - 종료
-            $("#bg").hide();
-            $("#game_over").show();
-        }
-
+        // 로그인화면 => 게임 시작 => 게임 종료 => 로그인화면
         // 게임 시작
         function gameStart() {
             // 플레이어 이름 입력받기
@@ -399,6 +375,28 @@
             gunbaInterval1 = setInterval(() => gunbaDown(gunba1, isGunbaDown1), 10);
         }
 
+        // 게임 종료
+        function gameOver() {
+            clearTimeout();
+
+            // 마리오, 군바 - 체크 제거
+            clearInterval(marioInterval1);
+            clearInterval(gunbaInterval1);
+
+            // 군바 - 동작 종료, 초기화
+            gunbaInit(gunba1);
+
+            // 랭킹 - 랭킹 정보 등록 점수 - 마리오 다운 시, 0으로 초기화
+            rankSave(dev_name, score);
+            score = 0;
+            setScore(score);
+
+            // 화면 - 종료
+            $("#bg").hide();
+            $("#game_over").show();
+        }
+
+
         // 게임 로그인
         function gameLogin() {
             // 화면 - 로그인
@@ -409,7 +407,10 @@
             rankLoad();
         }
 
+        
         $(function () {
+
+            // 버튼 이벤트 등록
             $("#replay_btn").click(function () {
                 gameLogin();
             });
